@@ -1,0 +1,101 @@
+pip install nltk
+import nltk
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+
+# Download necessary NLTK resources
+nltk.download('punkt')
+nltk.download('stopwords')
+
+def preprocess_text(text):
+    """
+    Preprocesses input text by tokenizing, converting to lowercase, 
+    and removing stopwords.
+    
+    Args:
+        text (str): Input text to preprocess
+    
+    Returns:
+        list: Processed tokens
+    """
+    # Convert to lowercase
+    text = text.lower()
+    
+    # Tokenize the text
+    tokens = word_tokenize(text)
+    
+    # Remove stopwords
+    stop_words = set(stopwords.words('english'))
+    processed_tokens = [token for token in tokens if token not in stop_words]
+    
+    return processed_tokens
+
+def greet():
+    """
+    Greets the user when starting the chat.
+    
+    Returns:
+        str: Greeting message
+    """
+    return "Hi there! Welcome to the chatbot."
+
+def get_user_name():
+    """
+    Asks the user for their name.
+    
+    Returns:
+        str: User's name
+    """
+    return input("What's your name? ")
+
+def respond_to_input(user_input):
+    """
+    Generates a response based on predefined patterns.
+    
+    Args:
+        user_input (str): User's input text
+    
+    Returns:
+        str: Chatbot's response
+    """
+    # Preprocess the input
+    tokens = preprocess_text(user_input)
+    
+    # Predefined response patterns
+    if any(word in tokens for word in ['hi', 'hello', 'hey']):
+        return "Hello! How are you today?"
+    
+    if any(word in tokens for word in ['bye', 'goodbye']):
+        return "Goodbye! Have a great day!"
+    
+    if any(word in tokens for word in ['best', 'state', 'us']) and 'california' in tokens:
+        return "California is definitely the best state!"
+    
+    # Default response
+    return "I'm not sure how to respond to that. Could you rephrase?"
+
+def chat():
+    """
+    Main chat loop that continues until user exits.
+    """
+    print(greet())
+    
+    name = get_user_name()
+    print(f"Nice to meet you, {name}!")
+    
+    while True:
+        # Get user input
+        user_input = input("You: ")
+        
+        # Check for exit condition
+        if user_input.lower() == 'exit':
+            print("Chatbot: Goodbye!")
+            break
+        
+        # Generate and print response
+        response = respond_to_input(user_input)
+        print(f"Chatbot: {response}")
+
+# Run the chatbot
+if __name__ == "__main__":
+    chat()
